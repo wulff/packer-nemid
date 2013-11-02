@@ -1,0 +1,77 @@
+{
+    "builders": [
+        {
+            "type": "virtualbox",
+            "guest_os_type": "Ubuntu",
+            "disk_size": 4000,
+            "format": "ova",
+            "vboxmanage": [
+                ["modifyvm", "{{.Name}}", "--memory", "1024"],
+                ["modifyvm", "{{.Name}}", "--cpus", "1"]
+            ],
+            "vm_name": "packer-nemid",
+            "iso_url": "http://releases.ubuntu.com/12.04/ubuntu-12.04.3-server-i386.iso",
+            "iso_checksum_type": "md5",
+            "iso_checksum": "e7917ff0543d8248d00ffb166def849e",
+            "ssh_username": "nemid",
+            "ssh_password": "nemid",
+            "boot_wait": "30s",
+            "ssh_wait_timeout": "600s",
+            "http_directory": "config/",
+            "boot_command": [
+                "<esc><esc><enter><wait>",
+                "/install/vmlinuz noapic ",
+                "preseed/url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/preseed.cfg ",
+                "debian-installer=en_US auto locale=en_US kbd-chooser/method=us ",
+                "hostname={{ .Name }} ",
+                "fb=false debconf/frontend=noninteractive ",
+                "keyboard-configuration/modelcode=SKIP keyboard-configuration/layout=us ",
+                "keyboard-configuration/variant=us console-setup/ask_detect=false ",
+                "initrd=/install/initrd.gz -- <enter>"
+            ],
+            "shutdown_command": "echo 'nemid' | sudo -S shutdown -P now"
+        }
+    ],
+    "provisioners": [
+        {
+            "type": "shell",
+            "script": "./scripts/build_time.sh",
+            "execute_command" : "echo 'nemid' | {{ .Vars }} sudo -E -S sh '{{ .Path }}'"
+        },
+        {
+            "type": "shell",
+            "script": "./scripts/apt.sh",
+            "execute_command" : "echo 'nemid' | {{ .Vars }} sudo -E -S sh '{{ .Path }}'"
+        },
+        {
+            "type": "shell",
+            "script": "./scripts/sudo.sh",
+            "execute_command" : "echo 'nemid' | {{ .Vars }} sudo -E -S sh '{{ .Path }}'"
+        },
+        {
+            "type": "shell",
+            "script": "./scripts/nemid.sh",
+            "execute_command" : "echo 'nemid' | {{ .Vars }} sudo -E -S sh '{{ .Path }}'"
+        },
+        {
+            "type": "file",
+            "source": "./config/shell/",
+            "destination" : "/home/nemid"
+        },
+        {
+            "type": "file",
+            "source": "./config/chromium/",
+            "destination" : "/home/nemid/.config/chromium/Default"
+        },
+        {
+            "type": "file",
+            "source": "./config/openbox/",
+            "destination" : "/home/nemid/.config/openbox"
+        },
+        {
+            "type": "shell",
+            "script": "./scripts/cleanup.sh",
+            "execute_command" : "echo 'nemid' | {{ .Vars }} sudo -E -S sh '{{ .Path }}'"
+        }
+    ]
+}
