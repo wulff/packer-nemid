@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openbox_menu xmlns="http://openbox.org/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="file:///usr/share/openbox/menu.xsd">
+  <menu id="root-menu" label="Openbox 3">
+    <item label="Terminal emulator">
+      <action name="Execute">
+        <execute>x-terminal-emulator</execute>
+      </action>
+    </item>
+    <item label="Web browser">
+      <action name="Execute">
+        <execute>x-www-browser</execute>
+      </action>
+    </item>
+    <separator />
+    <item label="Exit">
+      <action name="Exit" />
+    </item>
+    <item label="Shutdown">
+      <action name="Execute">
+        <prompt>Are you sure you want to shutdown?</prompt>
+        <execute>sudo shutdown -h now</execute>
+      </action>
+    </item>
+  </menu>
+</openbox>
