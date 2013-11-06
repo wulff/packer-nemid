@@ -12,6 +12,8 @@ Getting started
 3. Open VirtualBox and use *File → Import Appliance* to import the appliance.
 4. Start the virtual machine and log on to your online bank, nemlog-in.dk, etc.
 
+When you're done, you can simply close the browser and right-click on the desktop to return to the console where you can type `sudo shutdown -h now` to perform a clean shutdown (this has been added to the right-click menu in the latest version of the configuration).
+
 
 Requirements
 ------------
